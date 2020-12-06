@@ -10,18 +10,14 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String
-    },
-    savedDate: {
-        type: Date,
-        default: Date.now
     }
-})
+}, {timestamps: true})
 
 userSchema.methods.encryptPassword = async (password) => {
     const salt = await bcrypt.genSalt(10)
     return await bcrypt.hash(password, salt)
 }
-userSchema.methods.validPassword = function(password){
-    return bcrypt.compare(this.password, password)
+userSchema.methods.validPassword = async function(password){
+    return await bcrypt.compare(password, this.password)
 }
 module.exports = mongoose.model('User', userSchema)
