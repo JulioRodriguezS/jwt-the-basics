@@ -109,8 +109,17 @@ const SignJWT = async (id) => {
     })
     return token
 }
-const VerifyToken = async (req, res, next){
-    console.log(res.headers.authorization)
+const VerifyToken = (req, res, next) => {
+    if (!req.headers.authorization)
+        res.status(401).send('no permissions')
+
+    const token = req.headers.authorization.split(' ')[1]
+    try {
+        const payLoad = jwt.verify(token, process.env.SECRET)
+        req.userId = payLoad._id
+    } catch (e) {
+        res.status(403).json({ err: e })
+    }
     next()
 }
 

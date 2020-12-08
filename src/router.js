@@ -10,6 +10,6 @@ router.post('/signIn', SignIn)
 router.get('/me', Me)
 router.get('/tasks', Tasks)
 router.get('/private-tasks', VerifyToken, PrivateTask)
-
+router.get('/public-tasks',  PrivateTask)
 
 module.exports = router
